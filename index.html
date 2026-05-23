@@ -905,28 +905,54 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+<script type="module">
 
-  // Import the functions you need from the SDKs you need
-import { initializeApp } from "firebase/app";
-import { getAnalytics } from "firebase/analytics";
-// TODO: Add SDKs for Firebase products that you want to use
-// https://firebase.google.com/docs/web/setup#available-libraries
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
-// Your web app's Firebase configuration
-// For Firebase JS SDK v7.20.0 and later, measurementId is optional
+import {
+  getFirestore,
+  collection,
+  addDoc
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
 const firebaseConfig = {
-  apiKey: "AIzaSyD03Bw-vGPzT8pOExeGPoslqeOys_-xPVQ",
-  authDomain: "myportfolio-bf372.firebaseapp.com",
-  projectId: "myportfolio-bf372",
-  storageBucket: "myportfolio-bf372.firebasestorage.app",
-  messagingSenderId: "101024343887",
-  appId: "1:101024343887:web:baf82b42c6df74d637073a",
-  measurementId: "G-6R8KFTSM8B"
+  apiKey: "YOUR_API_KEY",
+  authDomain: "YOUR_PROJECT.firebaseapp.com",
+  projectId: "YOUR_PROJECT_ID",
+  storageBucket: "YOUR_PROJECT.appspot.com",
+  messagingSenderId: "XXXXXXXX",
+  appId: "APP_ID"
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const analytics = getAnalytics(app);
+const db = getFirestore(app);
+
+const form = document.getElementById("contactForm");
+
+form.addEventListener("submit", async (e) => {
+  e.preventDefault();
+
+  const name = document.getElementById("name").value;
+  const email = document.getElementById("email").value;
+  const message = document.getElementById("message").value;
+
+  try {
+    await addDoc(collection(db, "messages"), {
+      name,
+      email,
+      message,
+      createdAt: new Date()
+    });
+
+    alert("Message Sent Successfully");
+    form.reset();
+
+  } catch (error) {
+    alert(error.message);
+  }
+});
+
+</script>
 
 </body>
 
